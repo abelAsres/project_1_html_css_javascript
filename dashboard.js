@@ -1,14 +1,19 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
-    let titleH1 = document.querySelector('#dashboard-title');
+    //let titleH1 = document.querySelector('#dashboard-title');
+    let titleSubtitle = document.querySelector('#user-subtitle');
 
     let userName = localStorage.getItem('userName');
     let userRole = localStorage.getItem('userRole');
+
+    let role = userRole == 1 ? "Manager" : "Associate";
     
-    titleH1.innerHTML= userName+ "'s Dashboard"
-    var doc = new DOMParser().parseFromString(tHead, "text/html");
+    titleSubtitle.innerHTML=userName + " | " + role;
+
+    //var doc = new DOMParser().parseFromString(tHead, "text/html");
 
     //document.getElementsByClassName('table')[0].appendChild(doc);
 
+    /*
     let table = document.querySelector('#table');
     let tHead;
     if(userRole === 1){
@@ -20,17 +25,35 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
 
     
-    table.appendChild(tHead);
+    table.appendChild(tHead);*/
+
+    createCardComponent();
+    
+    createCardComponent();
+    
+    createCardComponent();
+    
+    createCardComponent();
+    
+    createCardComponent();
+    
+    createCardComponent();
+
+
+    //console.log(card);
+    //document.querySelector('#columns').appendChild(card);
   });
 
   function createElement(elementType,className,elementInnerHtml){
     let element = document.createElement(elementType);
 
+    console.log(`elementInnerHTML: ${elementInnerHtml}`)
     if(elementInnerHtml){
       element.innerHTML= elementInnerHtml;
       
     }
 
+    console.log(`className: ${className}`);
     if(className){
       element.classList.add(className);
     }
@@ -47,47 +70,72 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
   }
 
-  function createCardComponent(){
-    let divCard = createElement('div','card');
-    let divCardImg = createElement('div','card-image');
-    let figureImage1 = createElement('figure','image is-4by3');
-    let img1 = document.createElement('img');
-    img1.setAttribute('src','https://bulma.io/images/placeholders/1280x960.png');
-    let divCardContent = createElement('div' ,'card-content');
-    let divMedia = createElement.apply('div','media');
-    let divMediaLeft = createElement.apply('div','media-left');
-    let figureImage2 = createElement('figure','image is-48x48');
-    let img2 = document.createElement('img');
-    img2.setAttribute('src','https://bulma.io/images/placeholders/96x96.png');
-    
+function createColumn(element){
+  let divColumn = createElement('div','column');
+  divColumn.appendChild(element);
+  return divColumn;
+}
+
+function addToColumns(column){
+  let divColumns = querySelector('.columns');
+  divColumns.appendChild(column);
+}
+
+function createCardComponent(){
+  let divCard = createElement('div','card');
+  let divCardImg = createElement('div','card-image');
+  let figureImage1 = document.createElement('figure','image');
+  figureImage1.classList.add('is-4by3')
+  let img1 = document.createElement('img');
+  img1.setAttribute('src','https://bulma.io/images/placeholders/1280x960.png');
+  let divCardContent = createElement('div' ,'card-content');
+  let divMedia = createElement('div','media');
+  let divMediaLeft = createElement('div','media-left');
+  let figureImage2 = document.createElement('figure','image');
+  figureImage2.classList.add('is-48x48');
+  let img2 = document.createElement('img');
+  img2.setAttribute('src','https://bulma.io/images/placeholders/96x96.png');
+  let divMediaContent = createElement('div','media-content');
+  let pTitleIs4 = document.createElement('p','title');
+  pTitleIs4.classList.add('is-4');
+  //TODO 1: Add who the user is 
+  let pSubtitle6 = createElement('p','subtitle');
+  pSubtitle6.classList.add('is-6');
+  //TODO 2: Add user email address
+  let divContent = createElement('div','content',' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a>@bulmaio</a>.');
+  let br = document.createElement('br');
+  let time = document.createElement('time');
+  time.setAttribute("datetime",'2022-1-1');
+
+  divCard.appendChild(divCardImg);
+  divCardImg.appendChild(figureImage1);
+  figureImage1.appendChild(img1);
+
+  divCard.appendChild(divCardContent);
+  divCardContent.appendChild(divMedia);
+  divMedia.appendChild(divMediaLeft);
+  divMediaLeft.appendChild(figureImage2);
+
+  divCardContent.appendChild(divMediaContent);
+  divMediaContent.appendChild(pTitleIs4);
+  divMediaContent.appendChild(pSubtitle6);
+
+  divCard.appendChild(divContent);
+  divContent.appendChild(br);
+  divContent.appendChild(time);
+
+  let column = createElement('div','column');
+
+  column.appendChild(divCard);
+  let mainColumnsDiv = document.querySelectorAll('.columns');
+
+  let columnDiv = mainColumnsDiv[mainColumnsDiv.length-1];
+
+  if (columnDiv.childNodes.length < 5){
+    columnDiv.appendChild(column);
+  }else{
+    let newDivColumns = createElement('div','columns')
+    newDivColumns.appendChild(column);
+    document.body.appendChild(newDivColumns);
   }
-
-
-  <div class="card">
-  <div class="card-image">
-    <figure class="image is-4by3">
-      <img src="https://bulma.io/images/placeholders/1280x960.png" alt="Placeholder image">
-    </figure>
-  </div>
-  <div class="card-content">
-    <div class="media">
-      <div class="media-left">
-        <figure class="image is-48x48">
-          <img src="https://bulma.io/images/placeholders/96x96.png" alt="Placeholder image">
-        </figure>
-      </div>
-      <div class="media-content">
-        <p class="title is-4">John Smith</p>
-        <p class="subtitle is-6">@johnsmith</p>
-      </div>
-    </div>
-
-    <div class="content">
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-      Phasellus nec iaculis mauris. <a>@bulmaio</a>.
-      <a href="#">#css</a> <a href="#">#responsive</a>
-      <br>
-      <time datetime="2016-1-1">11:09 PM - 1 Jan 2016</time>
-    </div>
-  </div>
-</div>
+}
