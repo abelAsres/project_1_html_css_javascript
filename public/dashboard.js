@@ -8,17 +8,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     titleSubtitle.innerHTML=userName + " | " + role;
 
-    createCardComponent();
+    let url = "http://localhost:8080/project-1/users";
+  
+    let users;
+    fetch(url, {
+      method: 'GET'
+    })
+    .then(response =>{
+      if(response.status === 200){
+        response.json()
+        .then(users =>{
+          for (let i = 0; i < users.length;i++){
+            console.log(i);
+            createUserCardComponent();
+          }
+        })
+        .catch(errorMsg=>{
+          console.log(`You ran into an error: ${errorMsg}`);
+        })
+    }})
+    .catch(errorMsg =>{
+      console.log(`You ran into an error: ${errorMsg}`);
+    })
+
     
-    createCardComponent();
+   
+
     
-    createCardComponent();
-    
-    createCardComponent();
-    
-    createCardComponent();
-    
-    createCardComponent();
   });
 
   function createElement(elementType,className,elementInnerHtml){
@@ -58,7 +74,7 @@ function addToColumns(column){
   divColumns.appendChild(column);
 }
 
-function createCardComponent(){
+function createReimbursementCardComponent(){
   let divCard = createElement('div','card');
   let divCardImg = createElement('div','card-image');
   let figureImage1 = document.createElement('figure','image');
@@ -115,4 +131,79 @@ function createCardComponent(){
     newDivColumns.appendChild(column);
     document.body.appendChild(newDivColumns);
   }
+}
+
+function createUserCardComponent (){
+  let divCard = createElement('div','card');
+  let divCardImg = createElement('div','card-image');
+  let figureImage1 = document.createElement('figure','image');
+  figureImage1.classList.add('is-4by3')
+  let img1 = document.createElement('img');
+  img1.setAttribute('src','https://storage.googleapis.com/project-1-images/reciepitExample.PNG');
+  let divCardContent = createElement('div' ,'card-content');
+  let divMediaContent = createElement('div','media-content');
+  let pTitleIs4 = document.createElement('p','title');
+  pTitleIs4.classList.add('is-4');
+  //TODO 1: Add who the user is 
+  let pSubtitle6 = createElement('p','subtitle');
+  pSubtitle6.classList.add('is-6');
+  //TODO 2: Add user email address
+  let divContent = createElement('div','content',' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a>@bulmaio</a>.');
+  let br = document.createElement('br');
+  let time = document.createElement('time');
+  time.setAttribute("datetime",'2022-1-1');
+
+  
+  divCard.appendChild(divCardImg);
+  divCardImg.appendChild(figureImage1);
+  figureImage1.appendChild(img1);
+
+  divCard.appendChild(divCardContent);
+
+  divCardContent.appendChild(divMediaContent);
+  divMediaContent.appendChild(pTitleIs4);
+  divMediaContent.appendChild(pSubtitle6);
+
+  divCard.appendChild(divContent);
+  divContent.appendChild(br);
+  divContent.appendChild(time);
+
+  let column = createElement('div','column');
+
+  column.appendChild(divCard);
+  let mainColumnsDiv = document.querySelectorAll('.columns');
+
+  let columnDiv = mainColumnsDiv[mainColumnsDiv.length-1];
+
+  if (columnDiv.childNodes.length < 5){
+    columnDiv.appendChild(column);
+  }else{
+    let newDivColumns = createElement('div','columns')
+    newDivColumns.appendChild(column);
+    document.body.appendChild(newDivColumns);
+  }
+
+}
+
+async function getAllUsers(){
+  
+  let url = "http://localhost:8080/project-1/users";
+  
+  let response =await fetch(url, {
+    method: 'GET'
+  });
+
+  if(response.status === 200){
+    let users = await response.json();
+
+    console.log(users);
+    return users;
+  }else {
+    let errorMsg = await response.text();
+    console.log(errorMsg);
+
+    let errorElement = document.querySelector('#error-msg');
+    errorElement.innerText = errorMsg;
+    errorElement.style.color = 'red';
+}
 }
