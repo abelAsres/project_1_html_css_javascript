@@ -1,5 +1,4 @@
 document.addEventListener("DOMContentLoaded", function(event) { 
-    //let titleH1 = document.querySelector('#dashboard-title');
     let titleSubtitle = document.querySelector('#user-subtitle');
 
     let userName = localStorage.getItem('userName');
@@ -9,24 +8,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     
     titleSubtitle.innerHTML=userName + " | " + role;
 
-    //var doc = new DOMParser().parseFromString(tHead, "text/html");
-
-    //document.getElementsByClassName('table')[0].appendChild(doc);
-
-    /*
-    let table = document.querySelector('#table');
-    let tHead;
-    if(userRole === 1){
-      let tHeadInnerHtml ="<tr> <th>Id</th> <th>User Name</th> <th>User Role</th> <th>Receipt</th> <th>Amount</th> </tr>"
-      tHead = createElement('tHead',tHeadInnerHtml);
-    }else{
-
-    }
-    
-
-    
-    table.appendChild(tHead);*/
-
     createCardComponent();
     
     createCardComponent();
@@ -38,10 +19,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     createCardComponent();
     
     createCardComponent();
-
-
-    //console.log(card);
-    //document.querySelector('#columns').appendChild(card);
   });
 
   function createElement(elementType,className,elementInnerHtml){
@@ -87,7 +64,7 @@ function createCardComponent(){
   let figureImage1 = document.createElement('figure','image');
   figureImage1.classList.add('is-4by3')
   let img1 = document.createElement('img');
-  img1.setAttribute('src','https://bulma.io/images/placeholders/1280x960.png');
+  img1.setAttribute('src','https://storage.googleapis.com/project-1-images/reciepitExample.PNG');
   let divCardContent = createElement('div' ,'card-content');
   let divMedia = createElement('div','media');
   let divMediaLeft = createElement('div','media-left');
