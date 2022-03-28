@@ -1,13 +1,15 @@
 const url = "http://localhost:8080/"
 
+let userName = localStorage.getItem('userName');
+let userRole = localStorage.getItem('userRole');
+let userId = localStorage.getItem('userId');
+let role = userRole == 1 ? "Manager" : "Associate";
+
+console.log(userName+" "+ userRole+ " "+ userId);
+
 document.addEventListener("DOMContentLoaded", function(event) { 
   let titleSubtitle = document.querySelector('#user-subtitle');
 
-  let userName = localStorage.getItem('userName');
-  let userRole = localStorage.getItem('userRole');
-
-  let role = userRole == 1 ? "Manager" : "Associate";
-  
   titleSubtitle.innerHTML=userName + " | " + role;
 
   if(role === "Manager"){
@@ -64,6 +66,40 @@ function createReimbursementCardComponent(reimbursement){
   let br = document.createElement('br');
   let time = document.createElement('time');
   time.setAttribute("datetime",'2022-1-1');
+  let cardFooter = createElement('footer','card-footer');
+  if(localStorage.getItem('userRole') == 1){
+    let approve = createElement('button','card-footer-item');
+    approve.addEventListener('click',approveReimbursement);
+    approve.classList.add('is-primary');
+    approve.classList.add('is-outlined');
+    approve.innerHTML="Approve";
+        
+    let disapprove = createElement('button','card-footer-item');
+    disapprove.addEventListener('click',disapproveReimbursement);
+    disapprove.classList.add('is-danger');
+    disapprove.classList.add('is-outlined');
+    disapprove.innerHTML="Disapprove";
+
+    cardFooter.appendChild(approve);
+    cardFooter.appendChild(disapprove);
+  }else{
+    let edit = createElement('button','card-footer-item');
+    edit.addEventListener('click',editReimbursement);
+    edit.classList.add('is-primary');
+    edit.classList.add('is-outlined');
+    edit.innerHTML= "Edit";
+    
+    let remove = createElement('button','card-footer-item');
+    remove.addEventListener('click',()=>{
+      removeReimbursement(reimbursement)
+    });
+    remove.classList.add('is-danger');
+    remove.classList.add('is-outlined');
+    remove.innerHTML="Remove"
+    
+    cardFooter.appendChild(edit);
+    cardFooter.appendChild(remove);
+  }
 
   divCard.appendChild(divCardImg);
   divCardImg.appendChild(figureImage1);
@@ -78,6 +114,8 @@ function createReimbursementCardComponent(reimbursement){
   divMediaContent.appendChild(pTitleIs4);
 
   divCard.appendChild(divContent);
+  
+  divCard.appendChild(cardFooter);
   divContent.appendChild(br);
   divContent.appendChild(time);
 
@@ -102,7 +140,7 @@ function createUserCardComponent (user){
   let divCardImg = createElement('div','card-image');
   let figureImage1 = document.createElement('figure','image');
   figureImage1.classList.add('is-4by3')
-  let img1 = document.createElement('img');
+  let img1 = createElement('img','is-rounded');
   if(user.profilePic){
     console.log(user.profilePic);
     img1.setAttribute('src',user.profilePic);
@@ -186,9 +224,6 @@ function getAllUsers(){
 }
 
 function getUserReimbursements(){
-  let userId = localStorage.getItem('userId');
-  console.log(userId);
-  console.log(typeof userId);
   let urlUserReimbursements = `${url}project-1/users/${userId}/reimbursements`;
 
 
@@ -213,10 +248,84 @@ function getUserReimbursements(){
   })
 }
 
+function approveReimbursement(){
+  alert('you clicked approveREimbursemetn');
+}
+
+function disapproveReimbursement(){
+  alert('you clicked disapproveREimbursemetn');
+}
+
+function editReimbursement(){
+  alert('you clicked editREimbursemetn');
+}
+
+function removeReimbursement(reimbursement){
+  const urlRemoveReimbursementById = url+`project-1/users/${userId}/reimbursements/${reimbursement.id}`;
+  
+  fetch(urlRemoveReimbursementById, {
+    method: 'DELETE'
+  })
+  .then(response =>{
+    if(response.status === 200){
+      response.json()
+      .then(isRemoved =>{
+        console.log(isRemoved);
+        if(isRemoved){
+          console.log(`reloading reimbursements`);
+          document.querySelector('.columns').innerHTML="";
+          getUserReimbursements();
+        }
+      })
+      .catch(errorMsg=>{
+        console.log(`You ran into an error: ${errorMsg}`);
+      })
+  }})
+  .catch(errorMsg =>{
+    console.log(`You ran into an error: ${errorMsg}`);
+  })
+}
+
 function hasResolver(reimbursement){
   return  reimbursement.resolver ? `Author: ${reimbursement.author} | Resover: ${reimbursement.resolver} ` : `Author: ${reimbursement.author}`;
 }
 
 function isResolved(reimbursement){
   return reimbursement.resolvedTime ? `Submitted Time: ${reimbursement.submittedTime} </br> Resolved Time: ${reimbursement.resolvedTime}` : `Submitted Time: ${reimbursement.submittedTime}`; 
+}
+
+function isActiveModal(){
+  let modal = document.querySelector('.modal');
+  modal.classList.contains('is-active') ? modal.classList.remove('is-active') : modal.classList.add('is-active');
+  modal.classList.contains('is-active') ? addFileName : removeFileName;
+}
+
+
+function addFileName(){
+  
+    let input = document.querySelector('.file-input')
+    let name = document.querySelector('.file-name')
+    input.addEventListener('change', () => {
+      let files = input.files
+      if (files.length === 0) {
+        name.innerText = 'No file selected'
+      } else {
+        name.innerText = files[0].name
+      }
+    })
+  
+}
+
+function removeFileName(){
+    // 2. Remove file name when form reset
+    let forms = document.getElementsByTagName('form')
+    for (let form of forms) {
+      form.addEventListener('reset', () => {
+        console.log('a')
+        let names = form.querySelectorAll('.file-name')
+        for (let name of names) {
+          name.innerText = 'No file selected'
+        }
+      })
+    }
 }

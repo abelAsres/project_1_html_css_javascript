@@ -8,9 +8,123 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
 </head>
 <body>
+<nav class="navbar" role="navigation" aria-label="main navigation">
+    <div class="navbar-brand">
+        <a class="navbar-item" href="#">
+        <img src="https://storage.googleapis.com/project-1-images/newHomerLogo.PNG" >
+        </a>
+    
+        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        </a>
+    </div>
+    
+    <div id="navbarBasicExample" class="navbar-menu">
+        <div class="navbar-start">
+        <a class="navbar-item">
+            Home
+        </a>
+    
+        <a class="navbar-item">
+            Documentation
+        </a>
+    
+        <div class="navbar-item has-dropdown is-hoverable">
+            <a class="navbar-link">
+            More
+            </a>
+    
+            <div class="navbar-dropdown">
+            <a class="navbar-item">
+                About
+            </a>
+            <a class="navbar-item">
+                Jobs
+            </a>
+            <a class="navbar-item">
+                Contact
+            </a>
+            <hr class="navbar-divider">
+            <a class="navbar-item">
+                Report an issue
+            </a>
+            </div>
+        </div>
+        </div>
+    
+        <div class="navbar-end">
+        <div class="navbar-item">
+            <div class="buttons">
+            <a class="button is-primary">
+                <strong>Sign up</strong>
+            </a>
+            <a class="button is-light">
+                Log in
+            </a>
+            </div>
+        </div>
+        </div>
+    </div>
+    </nav>
+    
     <h1 class= "title" id="dashboard-title">Dashboard</h1>
     <h2 class="subtitle" id="user-subtitle"></h2>
+    <button onclick="isActiveModal()">Add Reimbursements</button>
     <div class="columns">
+    </div>
+    <div class="modal is-clipped">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box">
+                <div class="field">
+                    <div class="control">
+                        Type: 
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Lodging
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Travel
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Food
+                            </label>
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Other
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Amount</label>
+                    <div class="control">
+                        <input type="number" min="1" step="0.01" class="input" placeholder="Enter Amount here" id="user-name">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Descripton</label>
+                    <div class="control">
+                        <textarea class="textarea is-info is-medium" placeholder="Reimbursement Descripton"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <input type="file" name="recepit" accept="image/png, image/jpeg, image/gif">
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-dark is-outlined" onclick="signIn()">
+                            Sign-In
+                        </button>
+                    </div> 
+                </div>
+            </div>
+        </div>
+        <button class="modal-close is-large" aria-label="close" onclick="isActiveModal()"></button>
     </div>
     <script src="./dashboard.js"></script>
 </body>
