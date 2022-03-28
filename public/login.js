@@ -22,11 +22,11 @@ async function signIn(){
     if (response.status == 200){
         let user = await response.json();
         localStorage.setItem('userName',user.userName);
-        localStorage.setItem('userRole',user.userRole);
+        localStorage.setItem('userRole',user.roleId);
 
         console.log(user.userName);
 
-        window.location = '/dashboard.html';
+        window.location = './dashboard.html';
 
     }else {
         let errorMsg = await response.text();
