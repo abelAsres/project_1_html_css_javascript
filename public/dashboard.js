@@ -18,24 +18,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     }else{
       getUserReimbursements();
     }
-    // fetch(url, {
-    //   method: 'GET'
-    // })
-    // .then(response =>{
-    //   if(response.status === 200){
-    //     response.json()
-    //     .then(users =>{
-    //       for (let i = 0; i < users.length;i++){
-    //         createUserCardComponent();
-    //       }
-    //     })
-    //     .catch(errorMsg=>{
-    //       console.log(`You ran into an error: ${errorMsg}`);
-    //     })
-    // }})
-    // .catch(errorMsg =>{
-    //   console.log(`You ran into an error: ${errorMsg}`);
-    // })
   });
 
   function createElement(elementType,className,elementInnerHtml){
@@ -48,7 +30,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
     if(className){
       element.classList.add(className);
     }
-    
     return element;
   }
 
@@ -72,13 +53,13 @@ function addToColumns(column){
   divColumns.appendChild(column);
 }
 
-function createReimbursementCardComponent(){
+function createReimbursementCardComponent(reimbursement){
   let divCard = createElement('div','card');
   let divCardImg = createElement('div','card-image');
   let figureImage1 = document.createElement('figure','image');
   figureImage1.classList.add('is-4by3')
   let img1 = document.createElement('img');
-  img1.setAttribute('src','https://storage.googleapis.com/project-1-images/reciepitExample.PNG');
+  img1.setAttribute('src',reimbursement.imageLink);
   let divCardContent = createElement('div' ,'card-content');
   let divMedia = createElement('div','media');
   let divMediaLeft = createElement('div','media-left');
@@ -90,12 +71,8 @@ function createReimbursementCardComponent(){
   let pTitleIs4 = document.createElement('p','title');
   pTitleIs4.classList.add('is-4');
   //TODO 1: Add who the user is 
-  pTitleIs4.innerHTML= user.userName;
-  let pSubtitle6 = createElement('p','subtitle');
-  pSubtitle6.classList.add('is-6');
-  //TODO 2: Add user email address
-  pSubtitle6.innerHTML=user.email;
-  let divContent = createElement('div','content',' Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus nec iaculis mauris. <a>@bulmaio</a>.');
+  pTitleIs4.innerHTML= hasResolver(reimbursement);
+  let divContent = createElement('div','content',`Amount: ${reimbursement.amount} <br/> ${isResolved(reimbursement)} <br/> Status: ${reimbursement.status} </br> Type: ${reimbursement.type}`);
   let br = document.createElement('br');
   let time = document.createElement('time');
   time.setAttribute("datetime",'2022-1-1');
@@ -111,7 +88,6 @@ function createReimbursementCardComponent(){
 
   divCardContent.appendChild(divMediaContent);
   divMediaContent.appendChild(pTitleIs4);
-  divMediaContent.appendChild(pSubtitle6);
 
   divCard.appendChild(divContent);
   divContent.appendChild(br);
@@ -213,10 +189,6 @@ function getAllUsers(){
           console.log(`creating ${user.userName}`);
           createUserCardComponent(user);
         }
-        //for (let i = 0; i < users.length;i++){
-          
-         // createUserCardComponent();
-       // }
       })
       .catch(errorMsg=>{
         console.log(`You ran into an error: ${errorMsg}`);
@@ -225,4 +197,40 @@ function getAllUsers(){
   .catch(errorMsg =>{
     console.log(`You ran into an error: ${errorMsg}`);
   })
+}
+
+function getUserReimbursements(){
+  let userId = localStorage.getItem('userId');
+  console.log(userId);
+  console.log(typeof userId);
+  let urlUserReimbursements = `${url}project-1/users/${userId}/reimbursements`;
+
+
+  fetch(urlUserReimbursements, {
+    method: 'GET'
+  })
+  .then(response =>{
+    if(response.status === 200){
+      response.json()
+      .then(reimbursements =>{
+        for(let reimbursement of reimbursements){
+          console.log(`creating ${reimbursement.id}`);
+          createReimbursementCardComponent(reimbursement);
+        }
+      })
+      .catch(errorMsg=>{
+        console.log(`You ran into an error: ${errorMsg}`);
+      })
+  }})
+  .catch(errorMsg =>{
+    console.log(`You ran into an error: ${errorMsg}`);
+  })
+}
+
+function hasResolver(reimbursement){
+  return  reimbursement.resolver ? `Author: ${reimbursement.author} | Resover: ${reimbursement.resolver} ` : `Author: ${reimbursement.author}`;
+}
+
+function isResolved(reimbursement){
+  return reimbursement.resolvedTime ? `Submitted Time: ${reimbursement.submittedTime} </br> Resolved Time: ${reimbursement.resolvedTime}` : `Submitted Time: ${reimbursement.submittedTime}`; 
 }

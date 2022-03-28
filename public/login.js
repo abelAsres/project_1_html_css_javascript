@@ -23,6 +23,7 @@ async function signIn(){
         let user = await response.json();
         localStorage.setItem('userName',user.userName);
         localStorage.setItem('userRole',user.roleId);
+        localStorage.setItem('userId',user.id);
 
         console.log(user.userName);
 
