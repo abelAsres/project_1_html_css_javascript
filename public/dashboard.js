@@ -1,46 +1,34 @@
 const url = "http://localhost:8080/"
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-    let titleSubtitle = document.querySelector('#user-subtitle');
+  let titleSubtitle = document.querySelector('#user-subtitle');
 
-    let userName = localStorage.getItem('userName');
-    let userRole = localStorage.getItem('userRole');
+  let userName = localStorage.getItem('userName');
+  let userRole = localStorage.getItem('userRole');
 
-    console.log(userRole);
-    let role = userRole == 1 ? "Manager" : "Associate";
-    
-    titleSubtitle.innerHTML=userName + " | " + role;
+  let role = userRole == 1 ? "Manager" : "Associate";
+  
+  titleSubtitle.innerHTML=userName + " | " + role;
 
-    //let url = "http://localhost:8080/project-1/users";
+  if(role === "Manager"){
+    getAllUsers();
+  }else{
+    getUserReimbursements();
+  }
+});
 
-    if(role === "Manager"){
-      getAllUsers();
-    }else{
-      getUserReimbursements();
-    }
-  });
+function createElement(elementType,className,elementInnerHtml){
+  let element = document.createElement(elementType);
 
-  function createElement(elementType,className,elementInnerHtml){
-    let element = document.createElement(elementType);
-
-    if(elementInnerHtml){
-      element.innerHTML= elementInnerHtml;
-    }
-
-    if(className){
-      element.classList.add(className);
-    }
-    return element;
+  if(elementInnerHtml){
+    element.innerHTML= elementInnerHtml;
   }
 
-  async function getAllUsersAndReimbRequests(){
-    const url = "";
-    
-    let response =await fetch(url, {
-      method: 'GET',
-      body: userJSON,
-    });
+  if(className){
+    element.classList.add(className);
   }
+  return element;
+}
 
 function createColumn(element){
   let divColumn = createElement('div','column');
@@ -173,9 +161,7 @@ function createUserCardComponent (user){
 }
 
 function getAllUsers(){
-  
   let urlAllUsers = `${url}project-1/users`;
-
 
   fetch(urlAllUsers, {
     method: 'GET'
