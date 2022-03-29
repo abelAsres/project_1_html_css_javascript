@@ -297,10 +297,53 @@ function isResolved(reimbursement){
 function isActiveModal(){
   let modal = document.querySelector('.modal');
   modal.classList.contains('is-active') ? modal.classList.remove('is-active') : modal.classList.add('is-active');
-  modal.classList.contains('is-active') ? addFileName : removeFileName;
+  //modal.classList.contains('is-active') ? addFileName : removeFileName;
 }
 
+function submitReimbursement(){
+  console.log("Starting Reimbursement");
+  let description = document.querySelector('#reimb-description').value; 
+  let amount=document.querySelector('#reimb-amount').value;
+  let imageData= document.querySelector('#reimb-image').files[0];
+  let typeRadioButtons = document.querySelectorAll('#reimb-type-radio > input');
+  let count = 1;
+  let typeId=0;
 
+
+  for (let button of typeRadioButtons){
+    if(button.checked){
+      typeId = count;
+    }
+    count++;
+  }
+
+  let reimbursement = new FormData();
+  reimbursement.append("image",imageData);
+  reimbursement.append("description",description);
+  reimbursement.append("amount",amount);
+  reimbursement.append("author",userId);
+  reimbursement.append("type",typeId);
+
+  const addReimbursementURL = url+ `project-1/users/${userId}/reimbursements`;
+
+  fetch(addReimbursementURL, {
+    method: 'POST', 
+    body:reimbursement
+  })
+  .then(response =>{
+    if(response.status === 200){
+      response.json()
+      .then(data =>{
+        let addedReimbursement = data;
+        createReimbursementCardComponent(addedReimbursement);
+      })
+      .catch(errorMsg=>{
+        console.log(`You ran into an error: ${errorMsg}`);
+      })
+  }})
+  isActiveModal();
+}
+/*
 function addFileName(){
   
     let input = document.querySelector('.file-input')
@@ -328,4 +371,4 @@ function removeFileName(){
         }
       })
     }
-}
+}*/
