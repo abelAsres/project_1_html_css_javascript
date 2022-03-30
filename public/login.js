@@ -28,7 +28,7 @@ async function signIn(){
         console.log(user.userName);
 
         window.location = './dashboard.html';
-
+        
     }else {
         let errorMsg = await response.text();
         console.log(errorMsg);

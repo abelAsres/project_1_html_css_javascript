@@ -6,132 +6,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./dashboard.css">
 </head>
 <body>
-<nav class="navbar" role="navigation" aria-label="main navigation">
-    <div class="navbar-brand">
-        <a class="navbar-item" href="#">
-        <img src="https://storage.googleapis.com/project-1-images/newHomerLogo.PNG" >
-        </a>
-    
-        <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        <span aria-hidden="true"></span>
-        </a>
-    </div>
-    
-    <div id="navbarBasicExample" class="navbar-menu">
-        <div class="navbar-start">
-        <a class="navbar-item">
-            Home
-        </a>
-    
-        <a class="navbar-item">
-            Documentation
-        </a>
-    
-        <div class="navbar-item has-dropdown is-hoverable">
-            <a class="navbar-link">
-            More
-            </a>
-    
-            <div class="navbar-dropdown">
-            <a class="navbar-item">
-                About
-            </a>
-            <a class="navbar-item">
-                Jobs
-            </a>
-            <a class="navbar-item">
-                Contact
-            </a>
-            <hr class="navbar-divider">
-            <a class="navbar-item">
-                Report an issue
-            </a>
-            </div>
-        </div>
-        </div>
-    
-        <div class="navbar-end">
-        <div class="navbar-item">
-            <div class="buttons">
-            <a class="button is-primary">
-                <strong>Sign up</strong>
-            </a>
-            <a class="button is-light">
-                Log in
-            </a>
-            </div>
-        </div>
-        </div>
-    </div>
-    </nav>
-    
-    <h1 class= "title" id="dashboard-title">Dashboard</h1>
-    <h2 class="subtitle" id="user-subtitle"></h2>
-    <button onclick="isActiveModal()">Add Reimbursements</button>
-    
+    <h1 class="title is-1">Dashboard</h1>
+    <h2 class="title is-2" id="user-title"></h2>
+
     
     <div class="columns">
-    </div>
-
-
-    <div class="modal is-clipped">
-        <div class="modal-background"></div>
-        <div class="modal-content">
-            <div class="box">
-                <form action="post" enctype="multipart/form-data" method="post"></form>
-                <div class="field">
-                    <div class="control" id="reimb-type-radio">
-                        Type: 
-                        <label class="radio">
-                            <input type="radio" name="type">
-                                Lodging
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="type">
-                                Travel
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="type">
-                                Food
-                            </label>
-                        <label class="radio">
-                            <input type="radio" name="type">
-                                Other
-                        </label>
+        <a href="./user-reimbursements.html">
+            <div class="column">
+                <div class="card">
+                    <div class="card-image">
+                        <figure class="image is-128by128">
+                            <img class="img" src="https://storage.googleapis.com/project-1-images/allCharacters.PNG" alt="All Associates">
+                        </figure>
                     </div>
-                </div>
-                <div class="field">
-                    <label>Amount</label>
-                    <div class="control">
-                        <input type="number" min="1" step="0.01" class="input" placeholder="Enter Amount here" id="reimb-amount">
-                        <i class="fas fa-user"></i>
+                    <div class="card-content">
+                        <div class="media">
+                            <div class="media-left">
+                                <figure class="image is-48x48">
+                                <img src="https://storage.googleapis.com/project-1-images/reciepitExample.PNG" alt="Example Reimbursement">
+                                </figure>
+                            </div>
+                            <div class="media-content">
+                                <p class="title is-4">Get All Reimbursements</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="field">
-                    <label>Descripton</label>
-                    <div class="control">
-                        <textarea class="textarea is-info is-medium" placeholder="Reimbursement Descripton" id="reimb-description"></textarea>
-                    </div>
-                </div>
-                <div class="field">
-                    <input type="file" name="recepit" accept="image/png, image/jpeg, image/gif" id="reimb-image">
-                </div>
-                <div class="field">
-                    <div class="control">
-                        <button class="button is-dark is-outlined" onclick="submitReimbursement()">
-                            Submit
-                        </button>
-                    </div> 
                 </div>
             </div>
-            <button class="modal-close is-large" aria-label="close" onclick="isActiveModal()"></button>
-        </div>
+        </a>
         
+
+        <div class="column">
+            <div class="card">
+                <div class="card-image">
+                    <figure class="image is-48by48">
+                    <img src="https://storage.googleapis.com/project-1-images/allCharacters.PNG" alt="All Associates">
+                    </figure>
+                </div>
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-48x48">
+                            <img src="https://storage.googleapis.com/project-1-images/reciepitExample.PNG" alt="Example Reimbursement">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">Get All Reimbursements</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <script src="./dashboard.js"></script>  
+
+    <script src="./dashboard.js"></script>
 </body>
 </html>

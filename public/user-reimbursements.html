@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Associate Reimbursements</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
+    <link rel="stylesheet" href="./user-reimbursements.css">
+</head>
+<body>
+    <div class="buttons">
+        <button class="button is-info" onclick="sortByType()">Sort By Type</button>
+        <button class="button is-info" onclick="sortByAmount()">Sort By Amount</button>
+        <button class="button is-info" onclick="sortByStatus()">Sort By Status</button>
+        <button class="button is-info" onclick="sortBySubmitted()">Sort By Submitted</button>
+    </div>
+
+    <div class="buttons">
+        <button class="button is-primary" onclick="filterByType()">Filter By Type</button>
+        <button class="button is-primary" onclick="filterByAmount()">Filter By Amount</button>
+        <button class="button is-primary" onclick="filterByStatus()">Filter By Status</button>
+        <button class="button is-primary" onclick="filterBySubmitted()">Filter By Submitted</button>
+    </div>
+
+    <label for="type">Type:</label>
+    <select name="type" id="type" onchange="filterByType(this)">
+        <option value="">Select a Type</option>
+        <option value="Lodging">Lodging</option>
+        <option value="Travel">Travel</option>
+        <option value="Food">Food</option>
+        <option value="Other">Other</option>
+    </select>
+
+    <label for="associate">Associate:</label>
+    <select name="associate" id="associate" onchange="filterByAssociate(this)">
+        <option value="">Select a Associate</option>
+    </select>
+
+    <table class="table">
+    <thead>
+        <tr>
+        <th><abbr title="Amount">Amt</th>
+        <th>Associate</th>
+        <th>Type</th>
+        <th>Submitted</th>
+        <th>Resolved</th>
+        <th>Description</th>
+        <th>Receipt</th>
+        <th>Status</th>
+        <th>Resolver</th>
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+        <tr>
+        <th><abbr title="Amount">Amt</th>
+        <th>Associate</th>
+        <th>Type</th>
+        <th>Submitted</th>
+        <th>Resolved</th>
+        <th>Description</th>
+        <th>Receipt</th>
+        <th>Status</th>
+        <th>Resolver</th>
+        </tr>
+        </tr>
+    </tfoot>
+    <tbody>
+        
+    </tbody>
+    </table>
+
+    <div class="modal is-clipped">
+        <div class="modal-background"></div>
+        <div class="modal-content">
+            <div class="box">
+                <form action="post" enctype="multipart/form-data" method="post"></form>
+                <div class="field">
+                    <div class="control" id="reimb-type-radio">
+                        Type: 
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Lodging
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Travel
+                        </label>
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Food
+                            </label>
+                        <label class="radio">
+                            <input type="radio" name="type">
+                                Other
+                        </label>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Amount</label>
+                    <div class="control">
+                        <input type="number" min="1" step="0.01" class="input" placeholder="Enter Amount here" id="reimb-amount">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Descripton</label>
+                    <div class="control">
+                        <textarea class="textarea is-info is-medium" placeholder="Reimbursement Descripton" id="reimb-description"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <input type="file" name="recepit" accept="image/png, image/jpeg, image/gif" id="reimb-image">
+                </div>
+                <div class="field">
+                    <div class="control">
+                        <button class="button is-dark is-outlined" onclick="submitReimbursement()">
+                            Submit
+                        </button>
+                    </div> 
+                </div>
+            </div>
+            <button class="modal-close is-large" aria-label="close" onclick="isActiveModal()"></button>
+        </div>
+        
+    </div>
+    
+    <script src="./user-reimbursements.js"></script>
+</body>
+</html>
