@@ -33,11 +33,11 @@ function getAllReimbursements(){
             fetchedReimbursements = [];
             for(let reimbursement of reimbursements){
                 fetchedReimbursements.push(reimbursement);
-                addTableRow(reimbursement);
-                addAssociateToDropDown(reimbursement.author);
+                addTableRow(reimbursement);  
             }
-            
-            console.log(fetchedReimbursements.length);
+            for(let reimbursement of reimbursements){
+                addAssociateToDropDown(reimbursement.author);  
+            }            
         })
         .catch(errorMsg=>{
             console.log(`You ran into an error: ${errorMsg}`);
@@ -117,9 +117,22 @@ function addTableRow(reimbursement){
 
 function addAssociateToDropDown(associate){
     let selectTag = document.querySelector('#associate');
-    let option = document.createElement('option').appendChild(document.createTextNode(associate));
-    option.setAttribute('value',associate);
-    selectTag.appendChild(option);
+    let options = selectTag.getElementsByTagName('option');
+    let arr = Array.from(options);
+    let optionValues = [];
+    
+    for (let value of arr){
+        optionValues.push(value.innerHTML);
+    }
+
+    if (optionValues.indexOf(associate) === -1){    
+        let selectTag = document.querySelector('#associate');
+        let optionText = document.createTextNode(associate);
+        let option = document.createElement('option');
+        option.appendChild(optionText);
+        option.value=associate;
+        selectTag.appendChild(option);
+    }
 }
 
 function sortByAmount(){
@@ -192,7 +205,7 @@ function filterByType(type){
         });
     }else{
         results = filteredResults.filter(function(a) {
-            return a.type == type;
+            return a.type == type.value;
         });
     }
     
@@ -207,4 +220,37 @@ function filterByType(type){
     for (let reimbursement of filteredResults){
         addTableRow(reimbursement);
     }
+}
+
+function filterByAssociate(associate){
+    if(filteredResults.length == 0){
+        var results = fetchedReimbursements.filter(function(a) {
+            return a.author == associate.value;
+        });
+    }else{
+        results = filteredResults.filter(function(a) {
+            return a.author == associate.value;
+        });
+    }
+    
+
+    for(let result of results){
+        if(filteredResults.indexOf(result) === -1){
+            filteredResults.push(result);
+        }
+    }
+    
+    document.querySelector('tbody').innerHTML="";
+    for (let reimbursement of filteredResults){
+        addTableRow(reimbursement);
+    }
+}
+
+function clearFilters(){
+    document.querySelector('tbody').innerHTML="";
+    filteredResults = [];
+    for (let reimbursement of fetchedReimbursements){
+        addTableRow(reimbursement);
+    }
+
 }
