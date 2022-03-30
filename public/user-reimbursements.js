@@ -10,6 +10,17 @@ let filteredResults = [];
 document.addEventListener("DOMContentLoaded", function(event) {     
     
     if(role === "Manager"){
+        let th1 = document.createElement('th');
+        let th2 = document.createElement('th');
+
+        th1.appendChild(document.createTextNode('Accept/Decline'));
+        th2.appendChild(document.createTextNode('Accept/Decline'));
+
+        let tr1 = document.querySelector('thead > tr');
+        let tr2 = document.querySelector('tfoot > tr');
+
+        tr1.appendChild(th1);
+        tr2.appendChild(th2);
         getAllReimbursements();
     }else{
         getUserReimbursements();
@@ -103,7 +114,42 @@ function addTableRow(reimbursement){
     tdStatus.appendChild(document.createTextNode(reimbursement.status));
     let tdResolver = document.createElement('td');
     tdResolver.appendChild(document.createTextNode(reimbursement.resolver));
+    
+    let radio = document.createElement('div');
+    radio.classList.add('control');
+    let labelAccept = document.createElement('label');
+    labelAccept.classList.add('radio');
+    let acceptInput = document.createElement('input');
 
+    acceptInput.type = 'radio';
+    acceptInput.id = `resolve-accept-${reimbursement.id}`;
+    acceptInput.name= `resolve-${reimbursement.id}`;
+    acceptInput.value = 'Accept';
+
+    labelAccept.htmlFor = `resolve-accept-${reimbursement.id}`;
+
+    labelAccept.appendChild(acceptInput);
+    radio.appendChild(labelAccept);
+
+    let labelDecline = document.createElement('label');
+    labelDecline.classList.add('radio');
+    let declineInput = document.createElement('input');
+
+    declineInput.type = 'radio';
+    declineInput.id = `resolve-decline-${reimbursement.id}`;
+    declineInput.name= `resolve-${reimbursement.id}`;
+    declineInput.value = 'Decline';
+
+    labelDecline.htmlFor = `resolve-decline-${reimbursement.id}`;
+
+    labelDecline.appendChild(declineInput);
+    radio.appendChild(labelDecline);
+
+    let descriptionAccept = document.createTextNode('Accept');
+    let descriptionDecline = document.createTextNode('Decline');
+    
+    labelAccept.appendChild(descriptionAccept);
+    labelDecline.appendChild(descriptionDecline);
     let tBody = document.querySelector('tbody');
     
     
@@ -116,6 +162,10 @@ function addTableRow(reimbursement){
     tr.appendChild(tdReceipt);
     tr.appendChild(tdStatus);
     tr.appendChild(tdResolver);
+    if(role === 'Manager'){
+        console.log(radio);
+        tr.appendChild(radio);
+    }
     tBody.appendChild(tr);
 }
 
@@ -165,7 +215,7 @@ function sortByAmount(){
     fetchedReimbursements.sort(function(a, b) {
         let keyA =a.amount;
         let keyB= b.amount;
-        // Compare the 2 dates
+        
         if (keyA < keyB) return -1;
         if (keyA > keyB) return 1;
         return 0;
