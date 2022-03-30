@@ -36,7 +36,8 @@ function getAllReimbursements(){
                 addTableRow(reimbursement);  
             }
             for(let reimbursement of reimbursements){
-                addAssociateToDropDown(reimbursement.author);  
+                addAssociateToDropDown(reimbursement.author);
+                addManagerToDropDown(reimbursement.resolver)  
             }            
         })
         .catch(errorMsg=>{
@@ -66,6 +67,7 @@ fetch(urlUserReimbursements, {
                 fetchedReimbursements.push(reimbursement);
                 addTableRow(reimbursement);
                 addAssociateToDropDown(reimbursement.author);
+                addManagerToDropDown(reimbursement.resolver);
             }
         })
         .catch(errorMsg=>{
@@ -135,6 +137,28 @@ function addAssociateToDropDown(associate){
     }
 }
 
+function addManagerToDropDown(manager){
+    let selectTag = document.querySelector('#manager');
+    let options = selectTag.getElementsByTagName('option');
+    let arr = Array.from(options);
+    let optionValues = [];
+    
+    for (let value of arr){
+        optionValues.push(value.innerHTML);
+    }
+    
+    if(manager != null){
+        if (optionValues.indexOf(manager) === -1){
+            let selectTag = document.querySelector('#manager');
+            let optionText = document.createTextNode(manager);
+            let option = document.createElement('option');
+            option.appendChild(optionText);
+            option.value=manager;
+            selectTag.appendChild(option);
+        }
+    }
+}
+
 function sortByAmount(){
     fetchedReimbursements.sort(function(a, b) {
         let keyA =a.amount;
@@ -199,13 +223,42 @@ function sortBySubmitted(){
 }
 
 function filterByType(type){
+    console.log('filtering  by type');
     if(filteredResults.length == 0){
         var results = fetchedReimbursements.filter(function(a) {
             return a.type == type.value;
         });
+
+        for(let result of results){
+            if(filteredResults.indexOf(result) === -1){
+                filteredResults.push(result);
+            }
+        }
     }else{
-        results = filteredResults.filter(function(a) {
+        filteredResults = filteredResults.filter(function(a) {
             return a.type == type.value;
+        });
+    }
+    
+
+    
+    
+    document.querySelector('tbody').innerHTML="";
+    for (let reimbursement of filteredResults){
+        addTableRow(reimbursement);
+    }
+}
+
+function filterByStatus(status){
+    if(filteredResults.length == 0){
+        var results = fetchedReimbursements.filter(function(a) {
+            return a.status == status.value;
+        });
+        
+        
+    }else{
+        filteredResults = filteredResults.filter(function(a) {
+            return a.status == status.value;
         });
     }
     
@@ -244,6 +297,33 @@ function filterByAssociate(associate){
     for (let reimbursement of filteredResults){
         addTableRow(reimbursement);
     }
+
+    let dropDown= document.querySelector('#associate');
+    dropDown.selectedIndex = 0;
+}
+
+function filterByManager(manager){
+    if(filteredResults.length == 0){
+        var results = fetchedReimbursements.filter(function(a) {
+            return a.resolver == manager.value;
+        });
+    }else{
+        results = filteredResults.filter(function(a) {
+            return a.resolver == manager.value;
+        });
+    }
+    
+
+    for(let result of results){
+        if(filteredResults.indexOf(result) === -1){
+            filteredResults.push(result);
+        }
+    }
+    
+    document.querySelector('tbody').innerHTML="";
+    for (let reimbursement of filteredResults){
+        addTableRow(reimbursement);
+    }
 }
 
 function clearFilters(){
@@ -252,5 +332,17 @@ function clearFilters(){
     for (let reimbursement of fetchedReimbursements){
         addTableRow(reimbursement);
     }
+
+    let associateDropDown= document.querySelector('#associate');
+    associateDropDown.selectedIndex = 0;
+
+    let typeDropDown= document.querySelector('#type');
+    typeDropDown.selectedIndex = 0;
+
+    let statusDropDown= document.querySelector('#status');
+    statusDropDown.selectedIndex = 0;
+
+    let managerDropDown= document.querySelector('#manager');
+    managerDropDown.selectedIndex = 0;
 
 }

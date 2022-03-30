@@ -16,14 +16,7 @@
         <button class="button is-info" onclick="sortBySubmitted()">Sort By Submitted</button>
     </div>
 
-    <div class="buttons">
-        <button class="button is-primary" onclick="filterByType()">Filter By Type</button>
-        <button class="button is-primary" onclick="filterByAmount()">Filter By Amount</button>
-        <button class="button is-primary" onclick="filterByStatus()">Filter By Status</button>
-        <button class="button is-primary" onclick="filterBySubmitted()">Filter By Submitted</button>
-    </div>
-
-    <button class="button is-danger" onclick="clearFilters()">Clear Filters</button>
+    
 
     <label for="type">Type:</label>
     <select name="type" id="type" onchange="filterByType(this)">
@@ -34,11 +27,24 @@
         <option value="Other">Other</option>
     </select>
 
+    <label for="status">Status:</label>
+    <select name="status" id="status" onchange="filterByStatus(this)">
+        <option value="">Select a Status</option>
+        <option value="Lodging">Pending</option>
+        <option value="Travel">Approved</option>
+        <option value="Food">Denied</option>
+    </select>
+
     <label for="associate">Associate:</label>
     <select name="associate" id="associate" onchange="filterByAssociate(this)">
         <option value="">Select a Associate</option>
     </select>
 
+    <label for="manager">Manager:</label>
+    <select name="manager" id="manager" onchange="filterByManager(this)">
+        <option value="">Select a Manager</option>
+    </select>
+    <button class="button is-danger" onclick="clearFilters()">Clear Filters</button>
     <table class="table">
     <thead>
         <tr>
