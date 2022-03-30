@@ -95,8 +95,10 @@ function addTableRow(reimbursement){
     tdDescription.appendChild(document.createTextNode(reimbursement.description));
     let imageLink = document.createElement('a');
     imageLink.setAttribute('href',reimbursement.imageLink);
+    imageLink.setAttribute('target','_blank')
+    imageLink.appendChild(document.createTextNode(reimbursement.imageLink))
     let tdReceipt = document.createElement('td');
-    tdReceipt.appendChild(document.createTextNode(imageLink));
+    tdReceipt.appendChild(imageLink);    
     let tdStatus = document.createElement('td');
     tdStatus.appendChild(document.createTextNode(reimbursement.status));
     let tdResolver = document.createElement('td');
@@ -229,18 +231,20 @@ function filterByType(type){
             return a.type == type.value;
         });
 
-        for(let result of results){
-            if(filteredResults.indexOf(result) === -1){
-                filteredResults.push(result);
-            }
-        }
+        
     }else{
         filteredResults = filteredResults.filter(function(a) {
             return a.type == type.value;
         });
+        
+        filteredResults = [];
     }
     
-
+    for(let result of results){
+                if(filteredResults.indexOf(result) === -1){
+                    filteredResults.push(result);
+                }
+            }
     
     
     document.querySelector('tbody').innerHTML="";
@@ -260,6 +264,8 @@ function filterByStatus(status){
         filteredResults = filteredResults.filter(function(a) {
             return a.status == status.value;
         });
+        
+        filteredResults = [];
     }
     
 
@@ -284,8 +290,10 @@ function filterByAssociate(associate){
         results = filteredResults.filter(function(a) {
             return a.author == associate.value;
         });
+        filteredResults = [];
     }
     
+
 
     for(let result of results){
         if(filteredResults.indexOf(result) === -1){
@@ -311,6 +319,8 @@ function filterByManager(manager){
         results = filteredResults.filter(function(a) {
             return a.resolver == manager.value;
         });
+        
+        filteredResults = [];
     }
     
 
