@@ -90,6 +90,40 @@ fetch(urlUserReimbursements, {
     })
 }
 
+function updateReimbursementStatus(radio){
+    let id = radio.id.split('-')[2];
+    let status = radio.value;
+
+    let urlEditReimbursements = `${url}project-1/reimbursements/${id}?status=${status}&user_id=${userId}`;
+
+    console.log();
+
+    fetch(urlEditReimbursements, {
+            method: 'PATCH'
+        })
+        .then(response =>{
+            if(response.status === 200){
+            response.json()
+            .then(reimbursements =>{
+                
+                fetchedReimbursements = [];
+                document.querySelector('tbody').innerHTML="";
+                for(let reimbursement of reimbursements){
+                    fetchedReimbursements.push(reimbursement);
+                    addTableRow(reimbursement);
+                    addAssociateToDropDown(reimbursement.author);
+                    addManagerToDropDown(reimbursement.resolver);
+                }
+            })
+            .catch(errorMsg=>{
+                console.log(`You ran into an error: ${errorMsg}`);
+            })
+        }})
+        .catch(errorMsg =>{
+            console.log(`You ran into an error: ${errorMsg}`);
+        })
+}
+
 function addTableRow(reimbursement){
     let tr = document.createElement('tr');
     let tdAmount = document.createElement('td');
@@ -116,6 +150,7 @@ function addTableRow(reimbursement){
     tdResolver.appendChild(document.createTextNode(reimbursement.resolver));
     
     let radio = document.createElement('div');
+    radio.setAttribute('id',reimbursement.id);
     radio.classList.add('control');
     let labelAccept = document.createElement('label');
     labelAccept.classList.add('radio');
@@ -125,6 +160,9 @@ function addTableRow(reimbursement){
     acceptInput.id = `resolve-accept-${reimbursement.id}`;
     acceptInput.name= `resolve-${reimbursement.id}`;
     acceptInput.value = 'Accept';
+    acceptInput.addEventListener('change',()=>{
+        updateReimbursementStatus(acceptInput);
+    })
 
     labelAccept.htmlFor = `resolve-accept-${reimbursement.id}`;
 
@@ -139,7 +177,20 @@ function addTableRow(reimbursement){
     declineInput.id = `resolve-decline-${reimbursement.id}`;
     declineInput.name= `resolve-${reimbursement.id}`;
     declineInput.value = 'Decline';
-
+    declineInput.addEventListener('change',()=>{
+        updateReimbursementStatus(declineInput);
+    })
+    
+    if(reimbursement.status == 'Approved'){
+        acceptInput.checked=true;
+        acceptInput.disabled=true;
+        declineInput.disabled=true;
+    }
+    if(reimbursement.status == 'Denied'){
+        declineInput.checked=true;
+        acceptInput.disabled=true;
+        declineInput.disabled=true;
+    }
     labelDecline.htmlFor = `resolve-decline-${reimbursement.id}`;
 
     labelDecline.appendChild(declineInput);
@@ -163,7 +214,6 @@ function addTableRow(reimbursement){
     tr.appendChild(tdStatus);
     tr.appendChild(tdResolver);
     if(role === 'Manager'){
-        console.log(radio);
         tr.appendChild(radio);
     }
     tBody.appendChild(tr);
@@ -275,7 +325,6 @@ function sortBySubmitted(){
 }
 
 function filterByType(type){
-    console.log('filtering  by type');
     if(filteredResults.length == 0){
         var results = fetchedReimbursements.filter(function(a) {
             return a.type == type.value;
@@ -404,5 +453,6 @@ function clearFilters(){
 
     let managerDropDown= document.querySelector('#manager');
     managerDropDown.selectedIndex = 0;
-
 }
+
+
