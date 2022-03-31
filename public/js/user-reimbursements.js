@@ -7,6 +7,14 @@ let role = userRole == 1 ? "Manager" : "Associate";
 let fetchedReimbursements = [];
 let filteredResults = [];
 
+let logoutBtn = document.querySelector('#logout-btn');
+
+logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('jwt');
+
+    window.location = '../index.html';
+});
+
 document.addEventListener("DOMContentLoaded", function(event) {     
     
     if(role === "Manager"){
@@ -28,13 +36,16 @@ document.addEventListener("DOMContentLoaded", function(event) {
 });
 
 
-
+/* Fetch Request*/
 function getAllReimbursements(){
     let urlUserReimbursements = `${url}project-1/reimbursements`;
 
 
     fetch(urlUserReimbursements, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // Include our JWT into the request
+        }
     })
     .then(response =>{
         if(response.status === 200){
@@ -64,9 +75,12 @@ function getAllReimbursements(){
 function getUserReimbursements(){
 let urlUserReimbursements = `${url}project-1/users/${userId}/reimbursements`;
 
-
+console.log
 fetch(urlUserReimbursements, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // Include our JWT into the request
+        }
     })
     .then(response =>{
         if(response.status === 200){
@@ -99,7 +113,10 @@ function updateReimbursementStatus(radio){
     console.log();
 
     fetch(urlEditReimbursements, {
-            method: 'PATCH'
+            method: 'PATCH',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwt')}` // Include our JWT into the request
+            }
         })
         .then(response =>{
             if(response.status === 200){
@@ -124,6 +141,61 @@ function updateReimbursementStatus(radio){
         })
 }
 
+//resultSet on the backend casuing 400 error
+function submitReimbursement(){
+    let description = document.querySelector('#reimb-description').value; 
+    let amount=document.querySelector('#reimb-amount').value;
+    let imageData= document.querySelector('#reimb-image').files[0];
+    let typeRadioButtons = document.querySelectorAll('#reimb-type-radio > input');
+    let count = 1;
+    let typeId=1;
+
+
+    for (let button of typeRadioButtons){
+        if(button.checked){
+        typeId = count;
+        }
+        count++;
+    }
+
+    let reimbursement = new FormData();
+    reimbursement.append("image",imageData);
+    reimbursement.append("description",description);
+    reimbursement.append("amount",amount);
+    reimbursement.append("author",userId);
+    reimbursement.append("type",typeId);
+
+    const addReimbursementURL = url+ `project-1/users/${userId}/reimbursements`;
+
+    fetch(addReimbursementURL, {
+        method: 'POST', 
+        body:reimbursement,
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // Include our JWT into the request
+        }
+    })
+    .then(response =>{
+        if(response.status === 201){
+        response.json()
+        .then(addedReimbursement =>{
+            fetchedReimbursements.push(addedReimbursement);
+            console.log(fetchedReimbursements.indexOf(addedReimbursement));
+            addTableRow(addedReimbursement);
+
+            if(filteredResults.length > 0){
+                filteredResults = [];
+                clearFilters();
+            }
+        })
+        .catch(errorMsg=>{
+            console.log(`You ran into an error: ${errorMsg}`);
+        })
+    }})
+    isActiveModal();
+}
+
+
+/* Functions to manage DOM*/
 function addTableRow(reimbursement){
     let tr = document.createElement('tr');
     let tdAmount = document.createElement('td');
@@ -135,7 +207,7 @@ function addTableRow(reimbursement){
     let tdSubmitted = document.createElement('td');
     tdSubmitted.appendChild(document.createTextNode(reimbursement.submittedTime));
     let tdResolved = document.createElement('td');
-    tdResolved.appendChild(document.createTextNode(reimbursement.resolvedTime));
+    tdResolved.appendChild(document.createTextNode(isResolved(reimbursement.resolvedTime)));
     let tdDescription = document.createElement('td');
     tdDescription.appendChild(document.createTextNode(reimbursement.description));
     let imageLink = document.createElement('a');
@@ -147,7 +219,7 @@ function addTableRow(reimbursement){
     let tdStatus = document.createElement('td');
     tdStatus.appendChild(document.createTextNode(reimbursement.status));
     let tdResolver = document.createElement('td');
-    tdResolver.appendChild(document.createTextNode(reimbursement.resolver));
+    tdResolver.appendChild(document.createTextNode(hasResolver(reimbursement.resolver)));
     
     let radio = document.createElement('div');
     radio.setAttribute('id',reimbursement.id);
@@ -360,7 +432,7 @@ function filterByStatus(status){
         
         
     }else{
-        filteredResults = filteredResults.filter(function(a) {
+        results = filteredResults.filter(function(a) {
             return a.status == status.value;
         });
         
@@ -455,4 +527,16 @@ function clearFilters(){
     managerDropDown.selectedIndex = 0;
 }
 
+function isActiveModal(){
+    let modal = document.querySelector('.modal');
+    modal.classList.contains('is-active') ? modal.classList.remove('is-active') : modal.classList.add('is-active');
+    //modal.classList.contains('is-active') ? addFileName : removeFileName;
+}
 
+function hasResolver(resolver){
+    return resolver == null ? "Someone will be with you soon" : resolver;
+}
+
+function isResolved(time){
+    return time == null ? "Waiting to be Resolved" : time;
+}

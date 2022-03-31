@@ -24,10 +24,12 @@ async function signIn(){
         localStorage.setItem('userName',user.userName);
         localStorage.setItem('userRole',user.roleId);
         localStorage.setItem('userId',user.id);
+        let token = response.headers.get('Token');
+        localStorage.setItem('jwt', token);
 
         console.log(user.userName);
 
-        window.location = './dashboard.html';
+        window.location = '../html/dashboard.html';
         
     }else {
         let errorMsg = await response.text();

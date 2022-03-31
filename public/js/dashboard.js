@@ -5,6 +5,14 @@ let userRole = localStorage.getItem('userRole');
 let userId = localStorage.getItem('userId');
 let role = userRole == 1 ? "Manager" : "Associate";
 
+let logoutBtn = document.querySelector('#logout-btn');
+
+logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('jwt');
+
+    window.location = '../index.html';
+});
+
 document.addEventListener("DOMContentLoaded", function(event) { 
     let titleSubtitle = document.querySelector('#user-title');
 
@@ -32,4 +40,8 @@ let urlUserReimbursements = `${url}project-1/users/${userId}/reimbursements`;
     .catch(errorMsg =>{
         console.log(`You ran into an error: ${errorMsg}`);
     })
+}
+
+function logout(){
+
 }
