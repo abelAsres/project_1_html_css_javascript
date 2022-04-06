@@ -1,5 +1,8 @@
+
+//const url ="http://localhost:8080/project-1/login";
+const url = "http://35.239.233.30:8080/project-1/login";
+
 async function signIn(){
-    const url = "http://127.0.0.1:8080/project-1/login";
     let userName = document.getElementById('user-name');
     let password = document.getElementById('password');
 
@@ -15,10 +18,6 @@ async function signIn(){
         body: userJSON,
     });
 
-    //let token = res.headers.get('Token');
-    //localStorage.setItem('jwt',token);
-
-    console.log(response.status);
     if (response.status == 200){
         let user = await response.json();
         localStorage.setItem('userName',user.userName);

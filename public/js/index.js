@@ -1,15 +1,13 @@
 let token = localStorage.getItem("jwt");
 
-
 document.addEventListener("DOMContentLoaded", function(event) { 
     if(token != null){
-        console.log("")
+        console.log("already signed in")
         let loginBtn  = document.querySelector('#login-btn');
         loginBtn.removeAttribute('href')
         loginBtn.innerHTML="Log out";
         loginBtn.addEventListener('click', () => {
             localStorage.removeItem('jwt');
-        
             window.location = '../index.html';
         });
 

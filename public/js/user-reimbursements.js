@@ -1,4 +1,6 @@
-const url = "http://localhost:8080/"
+
+//const url ="http://localhost:8080/";
+const url = "http://35.239.233.30:8080/";
 
 let userName = localStorage.getItem('userName');
 let userRole = localStorage.getItem('userRole');
@@ -146,14 +148,16 @@ function submitReimbursement(){
     let description = document.querySelector('#reimb-description').value; 
     let amount=document.querySelector('#reimb-amount').value;
     let imageData= document.querySelector('#reimb-image').files[0];
-    let typeRadioButtons = document.querySelectorAll('#reimb-type-radio > input');
+    let typeRadioButtons = document.querySelectorAll('.reimb-type-radio');
     let count = 1;
     let typeId=1;
 
-
+    console.log(typeRadioButtons);
     for (let button of typeRadioButtons){
+        console.log(button);
         if(button.checked){
-        typeId = count;
+            console.log('button is checked');
+            typeId = count;
         }
         count++;
     }
@@ -213,7 +217,7 @@ function addTableRow(reimbursement){
     let imageLink = document.createElement('a');
     imageLink.setAttribute('href',reimbursement.imageLink);
     imageLink.setAttribute('target','_blank')
-    imageLink.appendChild(document.createTextNode(reimbursement.imageLink))
+    imageLink.appendChild(document.createTextNode(reimbursement.imageLink));
     let tdReceipt = document.createElement('td');
     tdReceipt.appendChild(imageLink);    
     let tdStatus = document.createElement('td');
@@ -334,7 +338,10 @@ function addManagerToDropDown(manager){
 }
 
 function sortByAmount(){
-    fetchedReimbursements.sort(function(a, b) {
+    if(filteredResults.length == 0){
+        filteredResults = fetchedReimbursements;
+    }
+    filteredResults.sort(function(a, b) {
         let keyA =a.amount;
         let keyB= b.amount;
         
@@ -344,13 +351,14 @@ function sortByAmount(){
     });
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of fetchedReimbursements){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 
 function sortByType(){
-    fetchedReimbursements.sort(function(a, b) {
+    if(filteredResults.length == 0){
+        filteredResults = fetchedReimbursements;
+    }
+    filteredResults.sort(function(a, b) {
         let keyA =a.type;
         let keyB= b.type;
         // Compare the 2 dates
@@ -360,13 +368,14 @@ function sortByType(){
     });
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of fetchedReimbursements){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 
 function sortByStatus(){
-    fetchedReimbursements.sort(function(a, b) {
+    if(filteredResults.length == 0){
+        filteredResults = fetchedReimbursements;
+    }
+    filteredResults.sort(function(a, b) {
         let keyA =a.status;
         let keyB= b.status;
         // Compare the 2 dates
@@ -376,12 +385,13 @@ function sortByStatus(){
     });
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of fetchedReimbursements){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 function sortBySubmitted(){
-    fetchedReimbursements.sort(function(a, b) {
+    if(filteredResults.length == 0){
+        filteredResults = fetchedReimbursements;
+    }
+    filteredResults.sort(function(a, b) {
         let keyA =a.submittedTime;
         let keyB= b.submittedTime;
         // Compare the 2 dates
@@ -391,18 +401,15 @@ function sortBySubmitted(){
     });
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of fetchedReimbursements){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 
 function filterByType(type){
+    let results = [];
     if(filteredResults.length == 0){
-        var results = fetchedReimbursements.filter(function(a) {
+        results = fetchedReimbursements.filter(function(a) {
             return a.type == type.value;
         });
-
-        
     }else{
         filteredResults = filteredResults.filter(function(a) {
             return a.type == type.value;
@@ -412,21 +419,20 @@ function filterByType(type){
     }
     
     for(let result of results){
-                if(filteredResults.indexOf(result) === -1){
-                    filteredResults.push(result);
-                }
-            }
+        if(filteredResults.indexOf(result) === -1){
+            filteredResults.push(result);
+        }
+    }
     
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of filteredResults){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 
 function filterByStatus(status){
+    let results = [];
     if(filteredResults.length == 0){
-        var results = fetchedReimbursements.filter(function(a) {
+        results = fetchedReimbursements.filter(function(a) {
             return a.status == status.value;
         });
         
@@ -447,14 +453,13 @@ function filterByStatus(status){
     }
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of filteredResults){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 
 function filterByAssociate(associate){
+    let results = [];
     if(filteredResults.length == 0){
-        var results = fetchedReimbursements.filter(function(a) {
+        results = fetchedReimbursements.filter(function(a) {
             return a.author == associate.value;
         });
     }else{
@@ -473,17 +478,17 @@ function filterByAssociate(associate){
     }
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of filteredResults){
-        addTableRow(reimbursement);
-    }
+    
+    buildReimbursementTable(filteredResults);
 
     let dropDown= document.querySelector('#associate');
     dropDown.selectedIndex = 0;
 }
 
 function filterByManager(manager){
+    let results = [];
     if(filteredResults.length == 0){
-        var results = fetchedReimbursements.filter(function(a) {
+        results = fetchedReimbursements.filter(function(a) {
             return a.resolver == manager.value;
         });
     }else{
@@ -502,17 +507,14 @@ function filterByManager(manager){
     }
     
     document.querySelector('tbody').innerHTML="";
-    for (let reimbursement of filteredResults){
-        addTableRow(reimbursement);
-    }
+    buildReimbursementTable(filteredResults);
 }
 
 function clearFilters(){
     document.querySelector('tbody').innerHTML="";
     filteredResults = [];
-    for (let reimbursement of fetchedReimbursements){
-        addTableRow(reimbursement);
-    }
+
+    buildReimbursementTable(fetchedReimbursements)
 
     let associateDropDown= document.querySelector('#associate');
     associateDropDown.selectedIndex = 0;
@@ -539,4 +541,10 @@ function hasResolver(resolver){
 
 function isResolved(time){
     return time == null ? "Waiting to be Resolved" : time;
+}
+
+function buildReimbursementTable(reimbursements){
+    for (let reimbursement of reimbursements){
+        addTableRow(reimbursement);
+    }
 }

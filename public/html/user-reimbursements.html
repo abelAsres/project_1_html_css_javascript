@@ -120,24 +120,23 @@
         <div class="modal-background"></div>
         <div class="modal-content">
             <div class="box">
-                <form action="post" enctype="multipart/form-data" method="post"></form>
                 <div class="field">
-                    <div class="control" id="reimb-type-radio">
+                    <div class="control">
                         Type: 
                         <label class="radio">
-                            <input type="radio" name="type">
+                            <input type="radio" name="type" class="reimb-type-radio">
                                 Lodging
                         </label>
                         <label class="radio">
-                            <input type="radio" name="type">
+                            <input type="radio" name="type" class="reimb-type-radio">
                                 Travel
                         </label>
                         <label class="radio">
-                            <input type="radio" name="type">
+                            <input type="radio" name="type" class="reimb-type-radio">
                                 Food
                             </label>
                         <label class="radio">
-                            <input type="radio" name="type">
+                            <input type="radio" name="type" class="reimb-type-radio">
                                 Other
                         </label>
                     </div>
@@ -169,7 +168,16 @@
             <button class="modal-close is-large" aria-label="close" onclick="isActiveModal()"></button>
         </div>
     </div>
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+            <strong>The Reimbursements</strong> by <a href="https://github.com/abelAsres/ExpenseReimbursementSystem">Abel Asress</a>. 
+            </p>
+        </div>
+    </footer>
     
     <script src="../js/user-reimbursements.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 </body>
 </html>

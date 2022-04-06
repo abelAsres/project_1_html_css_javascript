@@ -1,4 +1,8 @@
-const url = "http://localhost:8080/"
+
+//const url ="http://localhost:8080/";
+const url = "http://35.239.233.30:8080/";
+let token = localStorage.getItem("jwt");
+
 
 let userName = localStorage.getItem('userName');
 let userRole = localStorage.getItem('userRole');
@@ -23,7 +27,10 @@ function getUserReimbursements(){
 let urlUserReimbursements = `${url}project-1/users/${userId}/reimbursements`;
 
     fetch(urlUserReimbursements, {
-        method: 'GET'
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // Include our JWT into the request
+        }
     })
     .then(response =>{
         if(response.status === 200){
@@ -40,8 +47,4 @@ let urlUserReimbursements = `${url}project-1/users/${userId}/reimbursements`;
     .catch(errorMsg =>{
         console.log(`You ran into an error: ${errorMsg}`);
     })
-}
-
-function logout(){
-
 }
